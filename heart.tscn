@@ -1,0 +1,39 @@
+[gd_scene load_steps=6 format=3 uid="uid://docpiplkne8af"]
+
+[ext_resource type="Texture2D" uid="uid://c4c787ir8trrj" path="res://art/heart_tile.png" id="1_1ple7"]
+[ext_resource type="Script" path="res://heart.gd" id="1_ym0g2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkjs1"]
+atlas = ExtResource("1_1ple7")
+region = Rect2(34, 0, 17, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nj0iq"]
+atlas = ExtResource("1_1ple7")
+region = Rect2(0, 0, 17, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnlln"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kkjs1")
+}],
+"loop": true,
+"name": &"empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nj0iq")
+}],
+"loop": true,
+"name": &"full",
+"speed": 5.0
+}]
+
+[node name="Heart" type="Sprite2D"]
+scale = Vector2(4, 4)
+script = ExtResource("1_ym0g2")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dnlln")
+animation = &"empty"

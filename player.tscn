@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cirhgf3nkl0tv"]
+[gd_scene load_steps=15 format=3 uid="uid://cirhgf3nkl0tv"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_efo7a"]
 [ext_resource type="Texture2D" uid="uid://41qg1jw5x03e" path="res://art/playerGrey_up1.png" id="1_o0pp8"]
@@ -6,6 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://bbyq2fg76g2y3" path="res://art/player_die.png" id="2_pip0y"]
 [ext_resource type="Texture2D" uid="uid://ub6u1k5yalwx" path="res://art/playerGrey_walk1.png" id="3_rl3k6"]
 [ext_resource type="Texture2D" uid="uid://bmjg26rt1pa1x" path="res://art/playerGrey_walk2.png" id="4_71jtp"]
+[ext_resource type="AudioStream" uid="uid://dgiwibwbcl2wt" path="res://art/impactBell_heavy_002.ogg" id="7_n72td"]
+[ext_resource type="Texture2D" uid="uid://ck6pvb171cwao" path="res://art/shield.png" id="8_2n176"]
+[ext_resource type="AudioStream" uid="uid://dxhp470lbqr4a" path="res://art/impactTin_medium_003.ogg" id="9_s1ncy"]
+[ext_resource type="AudioStream" uid="uid://d37w03ivd4x2y" path="res://art/impactWood_light_000.ogg" id="10_e8w7p"]
+[ext_resource type="AudioStream" uid="uid://2r65o8vt4rwx" path="res://art/8bit_bomb_explosion.wav" id="11_f8hl4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_sg6n8"]
 animations = [{
@@ -40,11 +45,22 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gtw43"]
-radius = 25.0
-height = 56.0
+[sub_resource type="SpriteFrames" id="SpriteFrames_8lv8x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_2n176")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
-[node name="Player" type="Area2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gtw43"]
+radius = 26.0
+height = 52.01
+
+[node name="Player" type="Area2D" groups=["player"]]
 position = Vector2(338, 243)
 script = ExtResource("1_efo7a")
 
@@ -55,9 +71,32 @@ sprite_frames = SubResource("SpriteFrames_sg6n8")
 animation = &"up"
 metadata/_edit_group_ = true
 
+[node name="AnimatedSpriteShield" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.858824, 0.858824, 0.858824, 1)
+sprite_frames = SubResource("SpriteFrames_8lv8x")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -5)
+position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_gtw43")
 metadata/_edit_group_ = true
 
+[node name="hitSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("7_n72td")
+volume_db = 5.0
+pitch_scale = 0.8
+attenuation = 0.85
+panning_strength = 0.9
+
+[node name="shield_pop" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_s1ncy")
+panning_strength = 1.15
+
+[node name="shield_get" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_e8w7p")
+panning_strength = 1.15
+
+[node name="boom" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("11_f8hl4")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
